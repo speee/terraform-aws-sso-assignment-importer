@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "lib": [ "es2017", "DOM" ],
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@types",
+      "src/types",
+      "./typings"
+    ],
+    "esModuleInterop": true,
+    "jsx": "react",
+    "jsxFactory": "JSXSlack.h",
+    "jsxFragmentFactory": "JSXSlack.Fragment"
+  },
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    ".serverless/**/*",
+    "__tests__",
+    "**/__mocks__/*.ts"
+  ]
+}

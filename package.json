@@ -1,0 +1,36 @@
+{
+  "name": "importer",
+  "version": "1.0.0",
+  "description": "Script to import AWS SSO assignments into Terraform.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "run-s clean build",
+    "clean": "rimraf dist",
+    "lint": "eslint -f codeframe \"**/*.{ts,js,tsx,jsx}\"",
+    "lint:fix": "eslint --fix -f codeframe \"**/*.{ts,js,tsx,jsx}\"",
+    "import": "ts-node src/index.ts"
+  },
+  "author": "Ryoh Akiysohi",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-sso-admin": "^3.13.1",
+    "@types/node": "^14.14.21",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.41",
+    "@types/yargs": "^16.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
