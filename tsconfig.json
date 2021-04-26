@@ -14,22 +14,14 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "typeRoots": [
-      "./node_modules/@types",
-      "src/types",
-      "./typings"
+      "./node_modules/@types"
     ],
-    "esModuleInterop": true,
-    "jsx": "react",
-    "jsxFactory": "JSXSlack.h",
-    "jsxFragmentFactory": "JSXSlack.Fragment"
+    "esModuleInterop": true
   },
   "include": [
-    "./**/*.ts"
+    "./src/**/*.ts"
   ],
   "exclude": [
-    "node_modules/**/*",
-    ".serverless/**/*",
-    "__tests__",
-    "**/__mocks__/*.ts"
+    "node_modules/**/*"
   ]
 }
