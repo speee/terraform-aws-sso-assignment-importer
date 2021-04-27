@@ -10,19 +10,29 @@ import {
   paginateListAccountAssignments,
 } from "@aws-sdk/client-sso-admin";
 
+import {
+  OrganizationsClient,
+  OrganizationsPaginationConfiguration,
+  ListAccountsCommandInput,
+  paginateListAccounts,
+  Account,
+} from "@aws-sdk/client-organizations";
+
 export class AWSClient {
-  private client: SSOAdminClient;
+  private ssoClient: SSOAdminClient;
+  private orgClient: OrganizationsClient;
 
   constructor(region: string) {
     const config = {
       region: region,
     };
-    this.client = new SSOAdminClient(config);
+    this.ssoClient = new SSOAdminClient(config);
+    this.orgClient = new OrganizationsClient({});
   }
 
   public async getInstanceArn(): Promise<string> {
     const command = new ListInstancesCommand({});
-    const response: ListInstancesCommandOutput = await this.client.send(
+    const response: ListInstancesCommandOutput = await this.ssoClient.send(
       command
     );
 
@@ -31,7 +41,7 @@ export class AWSClient {
 
   public async listPermissionSetArns(instanceArn: string): Promise<string[]> {
     const paginationConfig: SSOAdminPaginationConfiguration = {
-      client: this.client,
+      client: this.ssoClient,
     };
     const commandConfig: ListPermissionSetsCommandInput = {
       InstanceArn: instanceArn,
@@ -54,7 +64,7 @@ export class AWSClient {
     permissionSetArn: string
   ): Promise<AccountAssignment[]> {
     const paginationConfig: SSOAdminPaginationConfiguration = {
-      client: this.client,
+      client: this.ssoClient,
     };
     const commandConfig: ListAccountAssignmentsCommandInput = {
       AccountId: accountId,
@@ -71,5 +81,20 @@ export class AWSClient {
     }
 
     return accountAssignments;
+  }
+
+  public async listAccounts(): Promise<Account[]> {
+    const paginationConfig: OrganizationsPaginationConfiguration = {
+      client: this.orgClient,
+    };
+    const commandConfig: ListAccountsCommandInput = {};
+    const accounts: Account[] = [];
+    for await (const page of paginateListAccounts(
+      paginationConfig,
+      commandConfig
+    )) {
+      accounts.push(...page.Accounts!);
+    }
+    return accounts;
   }
 }
