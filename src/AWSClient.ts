@@ -29,6 +29,8 @@ import {
   DescribeGroupCommandInput,
 } from "@aws-sdk/client-identitystore";
 
+import { backOff } from "exponential-backoff";
+
 interface IdentityStoreCache {
   [key: string]: string;
 }
@@ -61,8 +63,8 @@ export class AWSClient {
 
   public async getInstanceArn(): Promise<string> {
     const command = new ListInstancesCommand({});
-    const response: ListInstancesCommandOutput = await this.ssoClient.send(
-      command
+    const response: ListInstancesCommandOutput = await backOff(() =>
+      this.ssoClient.send(command)
     );
 
     return response.Instances![0].InstanceArn!;
@@ -70,8 +72,8 @@ export class AWSClient {
 
   private async getIdentityStoreId(): Promise<string> {
     const command = new ListInstancesCommand({});
-    const response: ListInstancesCommandOutput = await this.ssoClient.send(
-      command
+    const response: ListInstancesCommandOutput = await backOff(() =>
+      this.ssoClient.send(command)
     );
 
     return response.Instances![0].IdentityStoreId!;
@@ -108,8 +110,8 @@ export class AWSClient {
         PermissionSetArn: permissionSetArn,
       };
       const command = new DescribePermissionSetCommand(config);
-      const result: DescribePermissionSetCommandOutput = await this.ssoClient.send(
-        command
+      const result: DescribePermissionSetCommandOutput = await backOff(() =>
+        this.ssoClient.send(command)
       );
       return result.PermissionSet!.Name!;
     }
@@ -194,6 +196,6 @@ export class AWSClient {
     if (this.accounts.length === 0) {
       this.accounts = await this.listAccounts();
     }
-    return this.accounts.filter((account) => (account.Id = accoundId))[0].Name!;
+    return this.accounts.filter((account) => account.Id === accoundId)[0].Name!;
   }
 }
