@@ -8,6 +8,9 @@ import {
   AccountAssignment,
   ListAccountAssignmentsCommandInput,
   paginateListAccountAssignments,
+  DescribePermissionSetCommand,
+  DescribePermissionSetCommandInput,
+  DescribePermissionSetCommandOutput,
 } from "@aws-sdk/client-sso-admin";
 
 import {
@@ -18,16 +21,42 @@ import {
   Account,
 } from "@aws-sdk/client-organizations";
 
+import {
+  IdentitystoreClient,
+  DescribeUserCommand,
+  DescribeUserCommandInput,
+  DescribeGroupCommand,
+  DescribeGroupCommandInput,
+} from "@aws-sdk/client-identitystore";
+
+interface IdentityStoreCache {
+  [key: string]: string;
+}
+
+interface PermissionSetNameCache {
+  [key: string]: string;
+}
+
 export class AWSClient {
   private ssoClient: SSOAdminClient;
   private orgClient: OrganizationsClient;
+  private identityStoreClient: IdentitystoreClient;
+  private identityStoreCache: IdentityStoreCache;
+  private region: string;
+  private accounts: Account[];
+  private permissionSetNameCache: PermissionSetNameCache;
 
   constructor(region: string) {
+    this.region = region;
     const config = {
-      region: region,
+      region: this.region,
     };
     this.ssoClient = new SSOAdminClient(config);
     this.orgClient = new OrganizationsClient({});
+    this.identityStoreClient = new IdentitystoreClient(config);
+    this.identityStoreCache = {};
+    this.accounts = [];
+    this.permissionSetNameCache = {};
   }
 
   public async getInstanceArn(): Promise<string> {
@@ -37,6 +66,15 @@ export class AWSClient {
     );
 
     return response.Instances![0].InstanceArn!;
+  }
+
+  private async getIdentityStoreId(): Promise<string> {
+    const command = new ListInstancesCommand({});
+    const response: ListInstancesCommandOutput = await this.ssoClient.send(
+      command
+    );
+
+    return response.Instances![0].IdentityStoreId!;
   }
 
   public async listPermissionSetArns(instanceArn: string): Promise<string[]> {
@@ -56,6 +94,25 @@ export class AWSClient {
     }
 
     return permissionSetArns;
+  }
+
+  public async getPermissionSetName(
+    permissionSetArn: string,
+    instanceArn: string
+  ): Promise<string> {
+    if (Object.keys(this.permissionSetNameCache).includes(permissionSetArn)) {
+      return this.permissionSetNameCache[permissionSetArn];
+    } else {
+      const config: DescribePermissionSetCommandInput = {
+        InstanceArn: instanceArn,
+        PermissionSetArn: permissionSetArn,
+      };
+      const command = new DescribePermissionSetCommand(config);
+      const result: DescribePermissionSetCommandOutput = await this.ssoClient.send(
+        command
+      );
+      return result.PermissionSet!.Name!;
+    }
   }
 
   public async listAccountAssignments(
@@ -95,6 +152,48 @@ export class AWSClient {
     )) {
       accounts.push(...page.Accounts!);
     }
-    return accounts;
+    this.accounts = accounts;
+    return this.accounts;
+  }
+
+  public async getDisplayName(
+    principalId: string,
+    principalType: string
+  ): Promise<string> {
+    if (Object.keys(this.identityStoreCache).includes(principalId)) {
+      return this.identityStoreCache[principalId];
+    } else {
+      const identityStoreId = await this.getIdentityStoreId();
+      if (principalType === "USER") {
+        const config: DescribeUserCommandInput = {
+          IdentityStoreId: identityStoreId,
+          UserId: principalId,
+        };
+        const command = new DescribeUserCommand(config);
+        const response = await this.identityStoreClient.send(command);
+        const userName = response.UserName;
+        this.identityStoreCache[principalId] = userName!;
+        return response.UserName!;
+      } else if (principalType === "GROUP") {
+        const config: DescribeGroupCommandInput = {
+          IdentityStoreId: identityStoreId,
+          GroupId: principalId,
+        };
+        const command = new DescribeGroupCommand(config);
+        const response = await this.identityStoreClient.send(command);
+        const groupName = response.DisplayName;
+        this.identityStoreCache[principalId] = groupName!;
+        return groupName!;
+      } else {
+        throw Error(`No such PrincipalType: ${principalType}`);
+      }
+    }
+  }
+
+  public async getAccountNameById(accoundId: string): Promise<string> {
+    if (this.accounts.length === 0) {
+      this.accounts = await this.listAccounts();
+    }
+    return this.accounts.filter((account) => (account.Id = accoundId))[0].Name!;
   }
 }
