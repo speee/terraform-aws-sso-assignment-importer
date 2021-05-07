@@ -19,24 +19,53 @@ export class TerraformHandler {
     this.assignments = assignments;
   }
 
-  // public generateTerraformFiles() {}
+  public runImportCommands(assignmentName: string): void {
+    const commands = this.generateTerraformImportCommands(assignmentName);
+    console.log(commands);
+    // TODO: Run commands
+  }
 
-  // private initDirectories() {}
-
-  // public runImportCommands() {}
-
-  //  private generateTerraformImportCommands() {}
+  private generateTerraformImportCommands(assignmentName: string): string[] {
+    return this.assignments.map((assignment: SSOAssignmentInfo) => {
+      if (!["GROUP", "USER"].includes(assignment.principalType)) {
+        throw new Error(`Unexpected principalType: ${assignment.principalType}`)
+      }
+      const principalTypeName = assignment.principalType === "GROUP" ? "groups" : "users";
+      return [
+        "terraform",
+        "import",
+        [
+          "module",
+          assignmentName,
+          "aws_ssoadmin_account_assignment",
+          `${principalTypeName}[\"${[
+            assignment.accountName,
+            assignment.principalDisplayName,
+            assignment.permissionSetName,
+          ].join(".")}\"]`,
+        ].join("."),
+        [
+          assignment.principalId,
+          assignment.principalType,
+          assignment.accountId,
+          "AWS_ACCOUNT",
+          assignment.permissionSetArn,
+          assignment.instanceArn,
+        ].join(",")
+      ].join(" ")
+    });
+  }
 
   public formatTfFile(filename: string): void {
     execSync(`terraform fmt ${filename}`);
   }
 
-  public generateTfvars(assignments_name: string): void {
+  public generateTfvars(assignmentName: string): void {
     const accountNames: string[] = Array.from(
       new Set(this.assignments.map((assignment) => assignment.accountName))
     );
     const filebody =
-      `${assignments_name} = {\n` +
+      `${assignmentName} = {\n` +
       accountNames
         .map((accountName) => {
           const assignmentAccounts: SSOAssignmentInfo[] = this.assignments.filter(
@@ -62,8 +91,8 @@ export class TerraformHandler {
                 )
               )
             );
-            // eslint-disable-next-line quotes
-            accountAssignmentsHcl += '"groups" = {\n';
+            // eslint-disable-next-line prettier/prettier
+            accountAssignmentsHcl += "\"groups\" = {\n";
             groupNames.forEach((groupName: string) => {
               accountAssignmentsHcl += `"${groupName}" = [\n`;
               accountAssignmentsHcl += assignmentGroups
@@ -96,8 +125,8 @@ export class TerraformHandler {
                 )
               )
             );
-            // eslint-disable-next-line quotes
-            accountAssignmentsHcl += '"users" = {\n';
+            // eslint-disable-next-line prettier/prettier
+            accountAssignmentsHcl += "\"users\" = {\n";
             userNames.forEach((userName: string) => {
               accountAssignmentsHcl += `"${userName}" = [\n`;
               accountAssignmentsHcl += assignmentUsers
@@ -120,6 +149,6 @@ export class TerraformHandler {
         .join("") +
       "}\n";
 
-    fs.writeFileSync(`./${assignments_name}.auto.tfvars`, filebody, "utf-8");
+    fs.writeFileSync(`./${assignmentName}.auto.tfvars`, filebody, "utf-8");
   }
 }
