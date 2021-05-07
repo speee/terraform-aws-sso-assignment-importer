@@ -19,19 +19,19 @@ export class TerraformHandler {
     this.assignments = assignments;
   }
 
-  public generateTerraformFiles() {}
+  // public generateTerraformFiles() {}
 
-  //  private initDirectories() {}
+  // private initDirectories() {}
 
-  public runImportCommands() {}
+  // public runImportCommands() {}
 
   //  private generateTerraformImportCommands() {}
 
-  public formatTfFile(filename: string) {
+  public formatTfFile(filename: string): void {
     execSync(`terraform fmt ${filename}`);
   }
 
-  public generateTfvars(assignments_name: string) {
+  public generateTfvars(assignments_name: string): void {
     const accountNames: string[] = Array.from(
       new Set(this.assignments.map((assignment) => assignment.accountName))
     );
@@ -48,6 +48,7 @@ export class TerraformHandler {
 
           let accountAssignmentsHcl = `"${accountName}" = {\n`;
 
+          // groups
           const assignmentGroups: SSOAssignmentInfo[] = this.assignments.filter(
             (assignment) =>
               assignment.accountName === accountName &&
@@ -61,7 +62,8 @@ export class TerraformHandler {
                 )
               )
             );
-            accountAssignmentsHcl += `"groups" = {\n`;
+            // eslint-disable-next-line quotes
+            accountAssignmentsHcl += '"groups" = {\n';
             groupNames.forEach((groupName: string) => {
               accountAssignmentsHcl += `"${groupName}" = [\n`;
               accountAssignmentsHcl += assignmentGroups
@@ -79,10 +81,11 @@ export class TerraformHandler {
             accountAssignmentsHcl += "},\n";
           }
 
+          // Users
           const assignmentUsers: SSOAssignmentInfo[] = this.assignments.filter(
             (assignment) =>
               assignment.accountName === accountName &&
-              assignment.principalType === "USERS"
+              assignment.principalType === "USER"
           );
           if (Object.keys(assignmentUsers).length !== 0) {
             const userNames = Array.from(
@@ -93,13 +96,14 @@ export class TerraformHandler {
                 )
               )
             );
+            // eslint-disable-next-line quotes
             accountAssignmentsHcl += '"users" = {\n';
-            accountAssignmentsHcl += userNames.forEach((userName: string) => {
+            userNames.forEach((userName: string) => {
               accountAssignmentsHcl += `"${userName}" = [\n`;
-              assignmentUsers
+              accountAssignmentsHcl += assignmentUsers
                 .filter(
                   (assignment: SSOAssignmentInfo) =>
-                    assignment.principalDisplayName == userName
+                    assignment.principalDisplayName === userName
                 )
                 .map(
                   (assignment: SSOAssignmentInfo) =>
@@ -108,12 +112,13 @@ export class TerraformHandler {
                 .join("");
               accountAssignmentsHcl += "],\n";
             });
+            accountAssignmentsHcl += "},\n";
           }
           accountAssignmentsHcl += "},\n";
           return accountAssignmentsHcl;
         })
-        .join("")
-    +"}\n";
+        .join("") +
+      "}\n";
 
     fs.writeFileSync(`./${assignments_name}.auto.tfvars`, filebody, "utf-8");
   }
