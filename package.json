@@ -14,23 +14,23 @@
   "author": "Ryoh Akiysohi",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-identitystore": "^3.13.1",
-    "@aws-sdk/client-organizations": "^3.13.1",
-    "@aws-sdk/client-sso-admin": "^3.13.1",
+    "@aws-sdk/client-identitystore": "^3.14.0",
+    "@aws-sdk/client-organizations": "^3.14.0",
+    "@aws-sdk/client-sso-admin": "^3.14.0",
     "@types/node": "^14.14.21",
     "exponential-backoff": "^3.1.0",
-    "yargs": "^16.2.0"
+    "yargs": "^17.0.1"
   },
   "engines": {
     "node": ">= 14.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.41",
+    "@types/node": "^15.0.2",
     "@types/yargs": "^16.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "npm-run-all": "^4.1.5",
