@@ -21,28 +21,33 @@ export class TerraformHandler {
 
   public runImportCommands(assignmentName: string): void {
     const commands = this.generateTerraformImportCommands(assignmentName);
-    console.log(commands);
-    // TODO: Run commands
+    commands.forEach((command) => {
+      console.log(`Started to run command: '${command}'`);
+      execSync(command);
+    });
   }
 
   private generateTerraformImportCommands(assignmentName: string): string[] {
     return this.assignments.map((assignment: SSOAssignmentInfo) => {
       if (!["GROUP", "USER"].includes(assignment.principalType)) {
-        throw new Error(`Unexpected principalType: ${assignment.principalType}`)
+        throw new Error(
+          `Unexpected principalType: ${assignment.principalType}`
+        );
       }
-      const principalTypeName = assignment.principalType === "GROUP" ? "groups" : "users";
+      const principalTypeName =
+        assignment.principalType === "GROUP" ? "groups" : "users";
       return [
         "terraform",
         "import",
         [
           "module",
-          assignmentName,
+          `${assignmentName}_assignments`,
           "aws_ssoadmin_account_assignment",
-          `${principalTypeName}[\"${[
+          `${principalTypeName}[\\"${[
             assignment.accountName,
             assignment.principalDisplayName,
             assignment.permissionSetName,
-          ].join(".")}\"]`,
+          ].join(".")}\\"]`,
         ].join("."),
         [
           assignment.principalId,
@@ -51,8 +56,8 @@ export class TerraformHandler {
           "AWS_ACCOUNT",
           assignment.permissionSetArn,
           assignment.instanceArn,
-        ].join(",")
-      ].join(" ")
+        ].join(","),
+      ].join(" ");
     });
   }
 
@@ -65,7 +70,7 @@ export class TerraformHandler {
       new Set(this.assignments.map((assignment) => assignment.accountName))
     );
     const filebody =
-      `${assignmentName} = {\n` +
+      `assignments_${assignmentName} = {\n` +
       accountNames
         .map((accountName) => {
           const assignmentAccounts: SSOAssignmentInfo[] = this.assignments.filter(
