@@ -103,7 +103,7 @@ export class TerraformHandler {
               accountAssignmentsHcl += assignmentGroups
                 .filter(
                   (assignment: SSOAssignmentInfo) =>
-                    assignment.principalDisplayName == groupName
+                    assignment.principalDisplayName === groupName
                 )
                 .map(
                   (assignment: SSOAssignmentInfo) =>

@@ -28,7 +28,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       type: "string",
     })
     .option("generate-only", {
-      description: "Not to run import command but generate .tf file.",
+      description: "Not to run import command but generate Terraform file.",
       type: "boolean",
       default: false,
     })
@@ -39,7 +39,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
     case "import": {
       const region: string = argv["sso-region"];
       const importer: Importer = new Importer(region);
-      const accounts: string[] = argv.accounts
+      const accounts: string[] = argv.accounts;
       const assignments = await importer.fetchAssignments(accounts);
       console.log(assignments);
       const assignmentName: string = argv["assignment-name"];

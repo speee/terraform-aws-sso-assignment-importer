@@ -143,6 +143,10 @@ export class AWSClient {
   }
 
   public async listAccounts(): Promise<Account[]> {
+    if (this.accounts.length > 0) {
+      return this.accounts;
+    }
+
     const paginationConfig: OrganizationsPaginationConfiguration = {
       client: this.orgClient,
     };

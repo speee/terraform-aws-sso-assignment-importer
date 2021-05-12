@@ -2,6 +2,7 @@ import { AWSClient } from "./AWSClient";
 import { AccountAssignment } from "@aws-sdk/client-sso-admin";
 import { Account } from "@aws-sdk/client-organizations";
 import { SSOAssignmentInfo } from "./TerraformHandler";
+import { backOff } from "exponential-backoff";
 
 export class Importer {
   private client: AWSClient;
@@ -59,7 +60,7 @@ export class Importer {
     console.debug(`Fetched ${accountAssignments.length} account assignments.`);
     const ssoAssingmensInfo: SSOAssignmentInfo[] = await Promise.all(
       accountAssignments.map((assignment: AccountAssignment) =>
-        this.convertSSOAssignmentInfo(assignment)
+        backOff(() => this.convertSSOAssignmentInfo(assignment))
       )
     );
     return ssoAssingmensInfo;
