@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Script to import AWS SSO assignments into Terraform.",
   "main": "dist/index.js",
+  "bin": {
+    "sso-importer": "./bin/sso-importer.js"
+  },
   "scripts": {
     "build": "tsc",
     "build:clean": "run-s clean build",
