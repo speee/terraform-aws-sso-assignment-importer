@@ -1,5 +1,5 @@
 import * as yargs from "yargs";
-import { Importer } from "./Importer";
+import { Importer } from "./importer";
 import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
 
 (async (): Promise<number> => {
