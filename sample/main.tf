@@ -19,7 +19,7 @@ locals {
 }
 
 module "sample_assignments" {
-  source = "./modules/sso_assignments"
+  source = "git@github.com:speee/terraform-aws-sso-assignment.git"
 
   instance_arn      = local.instance_arn
   identity_store_id = local.identity_store_id
