@@ -19,6 +19,7 @@ locals {
 }
 
 module "sample_assignments" {
+  # TODO: Replace with the module of Terraform Registry
   source = "git@github.com:speee/terraform-aws-sso-assignment.git"
 
   instance_arn      = local.instance_arn
