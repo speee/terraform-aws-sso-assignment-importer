@@ -61,8 +61,8 @@ export class TerraformHandler {
     });
   }
 
-  public formatTfFile(filename: string): void {
-    execSync(`terraform fmt ${filename}`);
+  public formatTfFile(): void {
+    execSync("terraform fmt");
   }
 
   public generateTfvars(assignmentName: string): void {

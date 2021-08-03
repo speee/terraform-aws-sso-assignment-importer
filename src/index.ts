@@ -45,7 +45,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       const assignmentName: string = argv["assignment-name"];
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars(assignmentName);
-      th.formatTfFile(`${assignmentName}.auto.tfvars`);
+      th.formatTfFile();
       if (!argv["generate-only"]) th.runImportCommands(assignmentName);
       break;
     }
@@ -56,7 +56,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       console.log(assignments);
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars("all");
-      th.formatTfFile("all.auto.tfvars");
+      th.formatTfFile();
       if (!argv["generate-only"]) th.runImportCommands("all");
       break;
     }
