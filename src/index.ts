@@ -46,7 +46,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars(assignmentName);
       th.formatTfFile();
-      if (!argv["generate-only"]) th.runImportCommands(assignmentName);
+      if (!argv["generate-only"]) th.runImportCommands(assignmentName, region);
       break;
     }
     case "import-all": {
@@ -57,7 +57,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars("all");
       th.formatTfFile();
-      if (!argv["generate-only"]) th.runImportCommands("all");
+      if (!argv["generate-only"]) th.runImportCommands("all", region);
       break;
     }
   }

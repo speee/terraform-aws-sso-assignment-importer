@@ -19,15 +19,16 @@ export class TerraformHandler {
     this.assignments = assignments;
   }
 
-  public runImportCommands(assignmentName: string): void {
-    const commands = this.generateTerraformImportCommands(assignmentName);
+  public runImportCommands(assignmentName: string, ssoRegion: string): void {
+    const commands = this.generateTerraformImportCommands(assignmentName, ssoRegion);
+    execSync("terraform init");
     commands.forEach((command) => {
       console.log(`Started to run command: '${command}'`);
       execSync(command);
     });
   }
 
-  private generateTerraformImportCommands(assignmentName: string): string[] {
+  private generateTerraformImportCommands(assignmentName: string, ssoRegion: string): string[] {
     return this.assignments.map((assignment: SSOAssignmentInfo) => {
       if (!["GROUP", "USER"].includes(assignment.principalType)) {
         throw new Error(
@@ -57,6 +58,7 @@ export class TerraformHandler {
           assignment.permissionSetArn,
           assignment.instanceArn,
         ].join(","),
+        `-var="sso_region=${ssoRegion}"`,
       ].join(" ");
     });
   }
