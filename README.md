@@ -10,7 +10,7 @@ npm i -g .
 
 ## Usage
 ### Create .tf files
-To execute `import-all` command, set `${ASSIGNMENT_NAME}` as `all`
+To execute `import-all` command, set `all` as `${ASSIGNMENT_NAME}`.
 - `main.tf` (Replace the `${ASSIGNMENT_NAME}`)
 ```
 module "${ASSIGNMENT_NAME}_assignments" {
