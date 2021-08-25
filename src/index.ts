@@ -54,7 +54,8 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
     case "import-all": {
       const region: string = argv["sso-region"];
       const importer: Importer = new Importer(region);
-      const assignments: SSOAssignmentInfo[] = await importer.fetchAllAssignments();
+      const assignments: SSOAssignmentInfo[] =
+        await importer.fetchAllAssignments();
       console.log(assignments);
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars("all");
