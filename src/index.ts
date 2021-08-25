@@ -4,6 +4,8 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
 
 (async (): Promise<number> => {
   const argv = yargs
+    .scriptName("sso-importer")
+    .usage("$0 <cmd> [args]")
     .command("import-all", "Import All AWS SSO assignments")
     .command("import", "Import AWS SSO assignments", (yargs) =>
       yargs
