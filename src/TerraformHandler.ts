@@ -40,6 +40,7 @@ export class TerraformHandler {
       return [
         "terraform",
         "import",
+        `-var="sso_region=${ssoRegion}"`,
         [
           "module",
           `${assignmentName}_assignments`,
@@ -58,7 +59,6 @@ export class TerraformHandler {
           assignment.permissionSetArn,
           assignment.instanceArn,
         ].join(","),
-        `-var="sso_region=${ssoRegion}"`,
       ].join(" ");
     });
   }
