@@ -32,11 +32,12 @@ export class Importer {
     );
     const allAssignments: SSOAssignmentInfo[] = [];
     for await (const accountId of accountIds) {
-      const accountAssignments: SSOAssignmentInfo[] = await this.fetchAssingmentsByAccountId(
-        accountId,
-        instanceArn,
-        permissionSets
-      );
+      const accountAssignments: SSOAssignmentInfo[] =
+        await this.fetchAssingmentsByAccountId(
+          accountId,
+          instanceArn,
+          permissionSets
+        );
       allAssignments.push(...accountAssignments);
     }
     return allAssignments;
@@ -50,11 +51,12 @@ export class Importer {
     const accountAssignments: AccountAssignment[] = [];
     console.debug(`Fetching account assignments for Account: ${accountId}...`);
     for await (const permissionSet of permissionSets) {
-      const accountPermissionSetAssignments: AccountAssignment[] = await this.client.listAccountAssignments(
-        accountId,
-        instanceArn,
-        permissionSet
-      );
+      const accountPermissionSetAssignments: AccountAssignment[] =
+        await this.client.listAccountAssignments(
+          accountId,
+          instanceArn,
+          permissionSet
+        );
       accountAssignments.push(...accountPermissionSetAssignments);
     }
     console.debug(`Fetched ${accountAssignments.length} account assignments.`);

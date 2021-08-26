@@ -20,7 +20,10 @@ export class TerraformHandler {
   }
 
   public runImportCommands(assignmentName: string, ssoRegion: string): void {
-    const commands = this.generateTerraformImportCommands(assignmentName, ssoRegion);
+    const commands = this.generateTerraformImportCommands(
+      assignmentName,
+      ssoRegion
+    );
     execSync("terraform init");
     commands.forEach((command) => {
       console.log(`Started to run command: '${command}'`);
@@ -28,7 +31,10 @@ export class TerraformHandler {
     });
   }
 
-  private generateTerraformImportCommands(assignmentName: string, ssoRegion: string): string[] {
+  private generateTerraformImportCommands(
+    assignmentName: string,
+    ssoRegion: string
+  ): string[] {
     return this.assignments.map((assignment: SSOAssignmentInfo) => {
       if (!["GROUP", "USER"].includes(assignment.principalType)) {
         throw new Error(
@@ -75,9 +81,10 @@ export class TerraformHandler {
       `assignments_${assignmentName} = {\n` +
       accountNames
         .map((accountName) => {
-          const assignmentAccounts: SSOAssignmentInfo[] = this.assignments.filter(
-            (assignment) => assignment.accountName === accountName
-          );
+          const assignmentAccounts: SSOAssignmentInfo[] =
+            this.assignments.filter(
+              (assignment) => assignment.accountName === accountName
+            );
           if (Object.keys(assignmentAccounts).length === 0) {
             return;
           }

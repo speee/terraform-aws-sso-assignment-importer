@@ -3,8 +3,10 @@ import { Importer } from "./importer";
 import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
 
 (async (): Promise<number> => {
-  const argv = yargs
-    .command("import-all", "Import All AWS SSO assignments")
+  const argv = await yargs
+    .scriptName("sso-importer")
+    .usage("$0 <cmd> [args]")
+    .command("import-all", "Import All AWS SSO assignments. The variable name must be `assignment_all`")
     .command("import", "Import AWS SSO assignments", (yargs) =>
       yargs
         .option("assignment-name", {
@@ -40,7 +42,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
       const region: string = argv["sso-region"];
       const importer: Importer = new Importer(region);
       const accounts: string[] = argv.accounts;
-      const assignments = await importer.fetchAssignments(accounts);
+      const assignments: SSOAssignmentInfo[] = await importer.fetchAssignments(accounts);
       console.log(assignments);
       const assignmentName: string = argv["assignment-name"];
       const th: TerraformHandler = new TerraformHandler(assignments);
@@ -52,7 +54,8 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
     case "import-all": {
       const region: string = argv["sso-region"];
       const importer: Importer = new Importer(region);
-      const assignments: SSOAssignmentInfo[] = await importer.fetchAllAssignments();
+      const assignments: SSOAssignmentInfo[] =
+        await importer.fetchAllAssignments();
       console.log(assignments);
       const th: TerraformHandler = new TerraformHandler(assignments);
       th.generateTfvars("all");

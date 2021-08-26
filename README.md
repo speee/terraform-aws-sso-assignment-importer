@@ -65,17 +65,4 @@ Options:
 ```
 
 ## Example
-### Import account assignments of all accounts in AWS Organizations.
-```
-cd ./example
-sso-importer import-all
-```
-
-### Import account assignments of specified accounts.
-```
-cd ./example
-sso-importer import \
-  --sso-region ${AWS_SSO_REGION} \
-  --assignment-name sample \
-  --accounts 123456789012 234567890123
-```
+See [example/all](example/all) and [example/sample](example/sample).
