@@ -3,7 +3,10 @@
 A script to import AWS Resources defined by [speee/terraform-aws-sso-assignment](https://github.com/speee/terraform-aws-sso-assignment) automatically.
 
 ## Installation
-```
+```bash
+git clone https://github.com/speee/terraform-aws-sso-assignment-importer.git
+cd ./terraform-aws-sso-assignment-importer
+npm ci
 npm build
 npm i -g .
 ```
