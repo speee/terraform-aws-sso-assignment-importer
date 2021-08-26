@@ -73,22 +73,22 @@ export class Importer {
   ): Promise<SSOAssignmentInfo> {
     const instanceArn: string = await this.client.getInstanceArn();
     const ssoAssignmentInfo: SSOAssignmentInfo = {
-      principalId: accountAssignment.PrincipalId!,
-      principalType: accountAssignment.PrincipalType!,
-      principalDisplayName: await this.client.getDisplayName(
-        accountAssignment.PrincipalId!,
-        accountAssignment.PrincipalType!
-      ),
       accountId: accountAssignment.AccountId!,
       accountName: await this.client.getAccountNameById(
         accountAssignment.AccountId!
       ),
+      instanceArn: instanceArn,
       permissionSetArn: accountAssignment.PermissionSetArn!,
       permissionSetName: await this.client.getPermissionSetName(
         accountAssignment.PermissionSetArn!,
         instanceArn
       ),
-      instanceArn: instanceArn,
+      principalDisplayName: await this.client.getDisplayName(
+        accountAssignment.PrincipalId!,
+        accountAssignment.PrincipalType!
+      ),
+      principalId: accountAssignment.PrincipalId!,
+      principalType: accountAssignment.PrincipalType!,
     };
     return ssoAssignmentInfo;
   }

@@ -182,8 +182,8 @@ export class AWSClient {
         return response.UserName!;
       } else if (principalType === "GROUP") {
         const config: DescribeGroupCommandInput = {
-          IdentityStoreId: identityStoreId,
           GroupId: principalId,
+          IdentityStoreId: identityStoreId,
         };
         const command = new DescribeGroupCommand(config);
         const response = await this.identityStoreClient.send(command);
