@@ -15,7 +15,7 @@
     "import": "ts-node src/index.ts"
   },
   "author": "Ryoh Akiysohi",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-identitystore": "^3.27.0",
     "@aws-sdk/client-organizations": "^3.27.0",
