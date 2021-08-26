@@ -6,7 +6,7 @@ import { SSOAssignmentInfo, TerraformHandler } from "./TerraformHandler";
   const argv = await yargs
     .scriptName("sso-importer")
     .usage("$0 <cmd> [args]")
-    .command("import-all", "Import All AWS SSO assignments")
+    .command("import-all", "Import All AWS SSO assignments. The variable name must be `assignment_all`")
     .command("import", "Import AWS SSO assignments", (yargs) =>
       yargs
         .option("assignment-name", {

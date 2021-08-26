@@ -18,7 +18,7 @@ locals {
   accounts          = data.aws_organizations_organization.organization.accounts
 }
 
-module "sample_assignments" {
+module "all_assignments" {
   # TODO: Replace with the module of Terraform Registry
   source = "git@github.com:speee/terraform-aws-sso-assignment.git"
 
@@ -27,5 +27,5 @@ module "sample_assignments" {
 
   organization_accounts = local.accounts
 
-  assignments = var.assignments_sample
+  assignments = var.assignments_all
 }
