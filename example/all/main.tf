@@ -19,8 +19,8 @@ locals {
 }
 
 module "all_assignments" {
-  # TODO: Replace with the module of Terraform Registry
-  source = "git@github.com:speee/terraform-aws-sso-assignment.git"
+  source  = "speee/sso-assignment/aws"
+  version = "1.0.0"
 
   instance_arn      = local.instance_arn
   identity_store_id = local.identity_store_id
