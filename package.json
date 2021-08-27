@@ -1,6 +1,6 @@
 {
   "name": "importer",
-  "description": "Script to import AWS SSO assignments into Terraform.",
+  "description": "A script to import AWS Resources defined by speee/terraform-aws-sso-assignment automatically.",
   "version": "1.0.0",
   "author": "Ryoh Akiysohi",
   "bin": {
