@@ -32,6 +32,7 @@
   "engines": {
     "node": ">= 14.0.0"
   },
+  "homepage": "https://github.com/speee/terraform-aws-sso-assignment-importer#readme",
   "license": "MIT",
   "main": "dist/index.js",
   "repository": {
