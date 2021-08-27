@@ -1,21 +1,12 @@
 {
   "name": "importer",
+  "description": "A script to import AWS Resources defined by speee/terraform-aws-sso-assignment automatically.",
   "version": "1.0.0",
-  "description": "Script to import AWS SSO assignments into Terraform.",
-  "main": "dist/index.js",
+  "author": "Ryoh Akiysohi",
   "bin": {
     "sso-importer": "./bin/sso-importer.js"
   },
-  "scripts": {
-    "build": "tsc",
-    "build:clean": "run-s clean build",
-    "clean": "rimraf dist",
-    "lint": "eslint -f codeframe \"**/*.{ts,js,tsx,jsx}\"",
-    "lint:fix": "eslint --fix -f codeframe \"**/*.{ts,js,tsx,jsx}\"",
-    "import": "ts-node src/index.ts"
-  },
-  "author": "Ryoh Akiysohi",
-  "license": "MIT",
+  "bugs": "https://github.com/speee/terraform-aws-sso-assignment-importer/issues",
   "dependencies": {
     "@aws-sdk/client-identitystore": "^3.27.0",
     "@aws-sdk/client-organizations": "^3.27.0",
@@ -23,9 +14,6 @@
     "@types/node": "^16.7.1",
     "exponential-backoff": "^3.1.0",
     "yargs": "^17.1.1"
-  },
-  "engines": {
-    "node": ">= 14.0.0"
   },
   "devDependencies": {
     "@types/node": "^15.0.2",
@@ -41,5 +29,28 @@
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
+  },
+  "engines": {
+    "node": ">= 14.0.0"
+  },
+  "homepage": "https://github.com/speee/terraform-aws-sso-assignment-importer#readme",
+  "keywords": [
+    "aws sso",
+    "terraform",
+    "terraform module"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/speee/terraform-aws-sso-assignment-importer"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "run-s clean build",
+    "clean": "rimraf dist",
+    "import": "ts-node src/index.ts",
+    "lint": "eslint -f codeframe \"**/*.{ts,js,tsx,jsx}\"",
+    "lint:fix": "eslint --fix -f codeframe \"**/*.{ts,js,tsx,jsx}\""
   }
 }
