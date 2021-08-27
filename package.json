@@ -6,6 +6,7 @@
   "bin": {
     "sso-importer": "./bin/sso-importer.js"
   },
+  "bugs": "https://github.com/speee/terraform-aws-sso-assignment-importer/issues",
   "dependencies": {
     "@aws-sdk/client-identitystore": "^3.27.0",
     "@aws-sdk/client-organizations": "^3.27.0",
