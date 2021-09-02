@@ -68,4 +68,4 @@ Options:
 ```
 
 ## Example
-See [example/all](example/all) and [example/sample](example/sample).
+See [example/all](example/all) and [example/custom](example/custom).
